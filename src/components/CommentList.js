@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Comment from './Comment';
+import  toggleOpen from '../decorators/toggleOpen'
 /*
 export default class CommentList extends Component{
 
@@ -53,32 +54,31 @@ export default class CommentList extends Component{
 }
 */
 
-export default class CommentList extends Component{
+class CommentList extends Component{
+    static defaultProps = {
+        comments : []
+    }
     static propType = {
         article: PropTypes.shape({
             id: PropTypes.string.isRequired,
             title: PropTypes.string.isRequired,
-            text: PropTypes.string.isRequired
+            text: PropTypes.string
         })
     };
-    state = {
-        isOpen: false
-    };
     render(){
-        const text = this.state.isOpen ? 'hide comments' : 'show comments'
+        const text = this.props.isOpen ? 'hide comments' : 'show comments'
        return(
             <div>
-                <button onClick = {this.toggleOpen}>{text}</button>
+                <button onClick = {this.props.toggleOpen}>{text}</button>
                 {this.getBody()}
             </div>
         );
     }
 
     getBody(){
-            if (!this.state.isOpen) return null
-
-            const {comments} = this.props
-        if(!comments.length) return <p>No comments yet</p>
+            const {comments, isOpen} = this.props;
+             if (!isOpen) return null;
+             if(!comments.length) return <p>No comments yet</p>
 
         return(
             <ul>
@@ -88,11 +88,6 @@ export default class CommentList extends Component{
 
     }
 
-    toggleOpen = (ev) =>{
-        ev.preventDefault();
-        this.setState({
-            isOpen: !this.state.isOpen
-        });
-    }
-
 }
+
+export default toggleOpen(CommentList)
