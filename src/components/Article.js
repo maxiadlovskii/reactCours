@@ -11,10 +11,16 @@ class Article extends Component {
             text: PropTypes.string
         }).isRequired
     };
+    componentWillReceiveProps(nextProps){
+        console.log('---', 'updating ', this.props.isOpen, nextProps.isOpen);
+    }
+    componentWillMount(){
+        console.log('---', 'mounting');
+    }
     render() {
         const {article, isOpen, toggleOpen} = this.props;
         return (
-            <div>
+            <div ref = {this.setContainerRef} >
                 <h3>{article.title}</h3>
                 <button onClick = {toggleOpen}>
                     {isOpen ? 'close' : 'open'}
@@ -24,6 +30,13 @@ class Article extends Component {
         )
     }
 
+    setContainerRef = ref =>{
+        this.container = ref;
+        console.log('---', ref)
+    }
+    componentDidMount(){
+        console.log('---', 'mounted');
+    }
     getBody() {
         const {article, isOpen} = this.props;
         if (!isOpen) return null;
@@ -37,4 +50,4 @@ class Article extends Component {
     }
 }
 
-export default  toggleOpen(Article);
+export default  Article;
