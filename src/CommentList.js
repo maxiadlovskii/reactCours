@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import Comment from './Comment';
-
+/*
 export default class CommentList extends Component{
 
       constructor(props) {
@@ -10,7 +11,9 @@ export default class CommentList extends Component{
             isOpen: false
         }
     }
-
+    static defaultProps = {
+        comments : []
+    }
     render(){
         const {comments = []} = this.props;
         const {isOpen} = this.state;
@@ -28,17 +31,61 @@ export default class CommentList extends Component{
     }
 
      showComments(commentElements){
-
         return(
             <div>
                 {commentElements.length > 0 && 
                 <button onClick = {this.toggleOpen}>
-                    {this.state.isOpen ? 'show comments' : 'hide comments'}
+                    {this.state.isOpen ? 'hide comments' : 'show comments' }
                 </button>
                 }
                 {this.state.isOpen ? commentElements : null}
             </div>
         );
+    }
+
+    toggleOpen = (ev) =>{
+        ev.preventDefault();
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
+    }
+
+}
+*/
+
+export default class CommentList extends Component{
+    static propType = {
+        article: PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired,
+            text: PropTypes.string.isRequired
+        })
+    };
+    state = {
+        isOpen: false
+    };
+    render(){
+        const text = this.state.isOpen ? 'hide comments' : 'show comments'
+       return(
+            <div>
+                <button onClick = {this.toggleOpen}>{text}</button>
+                {this.getBody()}
+            </div>
+        );
+    }
+
+    getBody(){
+            if (!this.state.isOpen) return null
+
+            const {comments} = this.props
+        if(!comments.length) return <p>No comments yet</p>
+
+        return(
+            <ul>
+                {comments.map(comment => <li key = {comment.id}><Comment comment = {comment}/></li>)}
+            </ul>
+        )
+
     }
 
     toggleOpen = (ev) =>{
