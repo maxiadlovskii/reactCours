@@ -1,8 +1,9 @@
 import React, {Component, PureComponent} from 'react'
-import CommentList from './CommentList';
-import  toggleOpen from '../decorators/toggleOpen'
+import CommentList from '../CommentList';
+import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {CSSTransitionGroup} from 'react-transition-group'
+import { deleteArticle } from '../../AC'
 import './article.css'
 class Article extends PureComponent {
     static propType = {
@@ -31,6 +32,7 @@ class Article extends PureComponent {
                 <button onClick = {toggleOpen}>
                     {isOpen ? 'close' : 'open'}
                 </button>
+                <button onClick={this.handleDelete}>delete</button>
                 <CSSTransitionGroup
                     transitionName = 'article'
                     transitionEnterTimeout = {300}
@@ -71,6 +73,12 @@ class Article extends PureComponent {
 
         )
     }
+
+    handleDelete = () =>{
+            const {deleteArticle, article} = this.props
+            deleteArticle(article.id)
+            console.log('---', 'deleting article')
+    }
 }
 
-export default  Article;
+export default  connect(null, {deleteArticle})( Article );
