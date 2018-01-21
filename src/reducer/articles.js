@@ -1,4 +1,4 @@
-import {articles as defaultArticles} from '../fixtures'
+import {normalizedArticles as defaultArticles} from '../fixtures'
 import {ADD_SELECT, DELETE_ARTICLE, FILTER_BY_SELECT, FILTER_BY_DATE} from '../constans'
 export default (articleState = defaultArticles, action)=>{
     const {type, payload} = action
