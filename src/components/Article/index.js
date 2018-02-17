@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {CSSTransitionGroup} from 'react-transition-group'
 import { deleteArticle } from '../../AC'
+import {articleSelectorFactory} from '../../selectors/index'
 import './article.css'
 class Article extends PureComponent {
     static propType = {
@@ -26,6 +27,8 @@ class Article extends PureComponent {
 */
     render() {
         const {article, isOpen, toggleOpen} = this.props;
+        console.log(article)
+        if(!article) return null
         return (
             <div ref = {this.setContainerRef} >
                 <h3>{article.title}</h3>
@@ -35,22 +38,29 @@ class Article extends PureComponent {
                 <button onClick={this.handleDelete}>delete</button>
                 <CSSTransitionGroup
                     transitionName = 'article'
+                    transsitionApear
                     transitionEnterTimeout = {300}
-                    transitionLeaveTimeout = {300}
+                    transitionLeaveTimeout = {500}
+                    transitionAppearTimeout = {500}
+                    component = 'div'
                 >
                      {this.getBody()}
                 </CSSTransitionGroup>
             </div>
         )
     }
-
+    handleDelete = () =>{
+        const {deleteArticle, article} = this.props
+        deleteArticle(article.id)
+        console.log('---', 'deleting article')
+    }
     setContainerRef = ref =>{
      //   this.container = ref;
      //   console.log('---', ref )
     }
 
     setCommentsRef = ref => {
-
+        this.container= ref;
       //  console.log('---', ref );
     }
     componentDidMount(){
@@ -67,18 +77,14 @@ class Article extends PureComponent {
             <section>
                 {article.text}
                 <button onClick={() => this.setState({updateIndex: this.state.updateIndex + 1})}>update</button>
-                <CommentList comments = {article.comments} ref={this.setCommentsRef} key = {this.state.updateIndex}/>
+                <CommentList article = {article} ref={this.setCommentsRef} key = {this.state.updateIndex}/>
 
             </section>
 
         )
     }
 
-    handleDelete = () =>{
-            const {deleteArticle, article} = this.props
-            deleteArticle(article.id)
-            console.log('---', 'deleting article')
-    }
+
 }
 
 export default  connect(null, {deleteArticle})( Article );

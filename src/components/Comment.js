@@ -19,9 +19,6 @@ Comment.propTypes = {
         user: PropTypes.string.isRequired
     }).isRequired
 }
-
-
-
 const mapStateToProps = () => (state, ownProps) =>{
     const commentSelector = commentSelectorFactory()
     return{

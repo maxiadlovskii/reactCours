@@ -4,47 +4,40 @@ import Comment from './Comment';
 import  toggleOpen from '../decorators/toggleOpen'
 import CommentForm from './CommentForm'
 
-class CommentList extends Component{
-    static defaultProps = {
-        comments : []
-    }
-    static propType = {
-        article: PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            title: PropTypes.string.isRequired,
-            text: PropTypes.string
-        })
-    };
-    render(){
-        const text = this.props.isOpen ? 'hide comments' : 'show comments'
-       return(
-            <div>
-                <button onClick = {this.props.toggleOpen}>{text}</button>
-                {this.getBody()}
-                <CommentForm />
-            </div>
-        );
-    }
+function CommentList({article, isOpen, toggleOpen}) {
+    const text = isOpen ? 'hide comments' : 'show comments';
+    return (
+        <div>
+            <button onClick={toggleOpen}>{text}</button>
+            {getBody({article, isOpen})}
 
-    getBody(){
-            const {comments, isOpen} = this.props;
+        </div>
+    );
+}
+CommentList.propType = {
+        comments: PropTypes.array,
+        isOPen: PropTypes.bool,
+        toggleOpen: PropTypes.func
+    };
+
+function getBody({article: {comments = [], id}, isOpen}){
              if (!isOpen) return null;
              if(!comments.length) return (
             <div>
                 <p>No comments yet</p>
-                <CommentForm />
+                <CommentForm articleId = {id}/>
             </div>
         )
 
         return(
+            <div>
             <ul>
                 {comments.map(id => <li key = {id}><Comment id = {id}/></li>)}
-                <CommentForm />
+                <CommentForm articleId = {id}/>
             </ul>
+            </div>
         )
-
-    }
-
 }
+
 
 export default toggleOpen(CommentList)

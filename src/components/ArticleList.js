@@ -4,6 +4,7 @@ import  accordeon from '../decorators/accordeon'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {filtratedArticlesSelector} from "../selectors/index";
+import {loadAllArticles} from "../AC/index";
 
 class ArticleList extends Component{
     static propTypes = {
@@ -14,9 +15,13 @@ class ArticleList extends Component{
         toggleOpenItem: PropTypes.func
     };
 
+    componentDidMount(){
+        this.props.loadAllArticles()
+    }
+
     render(){
         const {articles, openItemId, toggleOpenItem} = this.props
-        const articleElements = this.props.articles.map(article => <li key = {article.id}>
+        const articleElements = articles.map(article => <li key={article.id}>
 
             <Article
                 article = {article}
@@ -37,4 +42,4 @@ export  default connect((state)=>{
     return {
         articles: filtratedArticlesSelector(state)
     }
-})( accordeon(ArticleList) )
+}, {loadAllArticles})( accordeon(ArticleList) )
