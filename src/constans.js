@@ -10,4 +10,8 @@ export const CHANGE_SELECTION = 'CHANGE_SELECTION'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const LOAD_ARTICLES = 'LOAD_ARTICLES'
 
+export const START = 'START'
+export const SUCCESS = 'SUCCESS'
+export const FAIL = 'FAIL'
+
 

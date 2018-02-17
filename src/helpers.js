@@ -1,9 +1,9 @@
-export function arrToMap(arr) {
-    return arr.reduce((acc, article) => {
-        acc[article.id] = article
-        return acc
-    }, {})
+import {OrderedMap, Map} from 'immutable' //OrderedMap тому що важливе збереження порядку статтей
+export function arrToMap(arr, DataRecord = Map) {
+    return arr.reduce((acc, item) =>
+        acc.set(item.id, new DataRecord(item))
+        , new OrderedMap({}))
 }
 export function mapToArr(obj) {
-    return Object.keys(obj).map(id =>obj[id])
+    return obj.valueSeq().toArray()
 }

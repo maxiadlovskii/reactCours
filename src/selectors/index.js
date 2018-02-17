@@ -4,7 +4,7 @@ import comments from "../reducer/comments";
 import {mapToArr} from "../helpers";
 
 const filtersGetter = state => state.filters
-const articlesGetter = state => state.articles
+const articlesGetter = state => state.articles.entities
 const commentsGetter = state => state.comments
 const idGetter = (state, props) => props.id
 
