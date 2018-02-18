@@ -1,4 +1,4 @@
-import {START, SUCCESS, FAIL} from "../constans";
+import {START, SUCCESS, FAIL} from "../constants";
 
 export default store => next => action =>{
     const {callAPI, type, ...rest} = action;

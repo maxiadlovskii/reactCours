@@ -1,4 +1,4 @@
-import {INCREMENT} from '../constans'
+import {INCREMENT} from '../constants'
 export default (count = 0, action) => {
     const {type} = action
     switch (type){

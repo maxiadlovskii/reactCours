@@ -1,6 +1,9 @@
 import {normalizedArticles as defaultArticles} from '../fixtures'
 import {arrToMap, mapToArr} from '../helpers'
-import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ARTICLES, START, SUCCESS, FAIL, LOAD_ARTICLE} from '../constans'
+import {
+    DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES,  START, SUCCESS, FAIL, LOAD_ARTICLE,
+    LOAD_ARTICLE_COMMENTS
+} from '../constants'
 import {OrderedMap, Map, Record} from 'immutable'
 //Опис вигляду статті, типу модель
 const ArticleRecord = Record({
@@ -8,6 +11,8 @@ const ArticleRecord = Record({
     title: '',
     id: undefined,
     loading: false,
+    commentsLoading: false,
+    commentsLoaded: false,
     comments: []
 })
 const ReducerState = Record({
@@ -39,12 +44,16 @@ export default (articleState = defaultState, action)=>{
                 }
             }
             */
-            return articleState.updateIn(['entities', payload.articleId, 'comments'], comments=> comments.concat({randomId})) //<-- Оновлюємо іммутабельні данні
+        case ADD_COMMENT:
+            return articleState.updateIn(
+                ['entities', payload.articleId, 'comments'],
+                comments => comments.concat(randomId)
+            )//<-- Оновлюємо іммутабельні данні
                                                                                                          // updateIn( [в чому оновлювати, що оновлювати], як оновлювати )
 
-        case LOAD_ARTICLES+START:
+        case LOAD_ALL_ARTICLES+START:
             return articleState.set('loading', true);
-        case LOAD_ARTICLES+SUCCESS:
+        case LOAD_ALL_ARTICLES+SUCCESS:
             return articleState
                 .set( 'entities', arrToMap(response, ArticleRecord),  ) //<-- Передаєм модель статті
                 .set('loading', false)
@@ -53,6 +62,14 @@ export default (articleState = defaultState, action)=>{
             return articleState.setIn(['entities', payload.id, 'loading'], true)
         case LOAD_ARTICLE+SUCCESS:
             return articleState.setIn(['entities', payload.id], new ArticleRecord(payload.response))
+        case LOAD_ARTICLE_COMMENTS + START:
+            console.log(LOAD_ARTICLE_COMMENTS + START )
+            return articleState.setIn(['entities', payload.articleId, 'commentsLoading'], true)
+        case LOAD_ARTICLE_COMMENTS + SUCCESS:
+            console.log(LOAD_ARTICLE_COMMENTS + SUCCESS + " IN ARTICLE")
+            return articleState
+                .setIn(['entities', payload.articleId, 'commentsLoading'], false)
+                .setIn(['entities', payload.articleId, 'commentsLoaded'], true)
     }
 
     return articleState

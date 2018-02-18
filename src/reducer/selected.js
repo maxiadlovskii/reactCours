@@ -1,4 +1,4 @@
-import {ADD_SELECT} from '../constans'
+import {ADD_SELECT} from '../constants'
 export default (select =[], action)=>{
     const {type, payload} = action;
     switch (type){

@@ -1,7 +1,7 @@
 import {
     INCREMENT, CHANGE_DATE_RANGE, CHANGE_SELECTION, DELETE_ARTICLE, ADD_SELECT, FILTER_BY_SELECT, SET_DATE,
-    FILTER_BY_DATE, ADD_COMMENT, LOAD_ARTICLES, LOAD_ARTICLE, START, FAIL, SUCCESS
-} from '../constans'
+    FILTER_BY_DATE, ADD_COMMENT, LOAD_ALL_ARTICLES, LOAD_ARTICLE, LOAD_ARTICLE_COMMENTS, START, FAIL, SUCCESS
+} from '../constants'
 export function increment() {
     return{
         type: INCREMENT
@@ -38,12 +38,22 @@ export function addComment(comment, articleId) {
     }
 }
 
+
 export function loadAllArticles() {
     return {
-        type: LOAD_ARTICLES,
+        type: LOAD_ALL_ARTICLES,
         callAPI: '/api/article'
     }
 }
+
+export function loadArticleComments(articleId) {
+    return {
+        type: LOAD_ARTICLE_COMMENTS,
+        payload: {articleId},
+        callAPI: `/api/comment?article=${articleId}`
+    }
+}
+
 export function loadArticle(id) {
     return (dispatch) =>{
         dispatch({
@@ -65,6 +75,8 @@ export function loadArticle(id) {
         }, 1000)
     }
 }
+
+
 /*
 export function loadArticle(id) {
     return {
