@@ -1,12 +1,13 @@
 import {normalizedArticles as defaultArticles} from '../fixtures'
 import {arrToMap, mapToArr} from '../helpers'
-import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ARTICLES, START, SUCCESS, FAIL} from '../constans'
+import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ARTICLES, START, SUCCESS, FAIL, LOAD_ARTICLE} from '../constans'
 import {OrderedMap, Map, Record} from 'immutable'
 //Опис вигляду статті, типу модель
 const ArticleRecord = Record({
     text: undefined,
     title: '',
     id: undefined,
+    loading: false,
     comments: []
 })
 const ReducerState = Record({
@@ -48,6 +49,10 @@ export default (articleState = defaultState, action)=>{
                 .set( 'entities', arrToMap(response, ArticleRecord),  ) //<-- Передаєм модель статті
                 .set('loading', false)
                 .set('loaded', true)
+        case LOAD_ARTICLE+START:
+            return articleState.setIn(['entities', payload.id, 'loading'], true)
+        case LOAD_ARTICLE+SUCCESS:
+            return articleState.setIn(['entities', payload.id], new ArticleRecord(payload.response))
     }
 
     return articleState

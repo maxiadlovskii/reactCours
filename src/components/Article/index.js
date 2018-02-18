@@ -3,8 +3,9 @@ import CommentList from '../CommentList';
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {CSSTransitionGroup} from 'react-transition-group'
-import { deleteArticle } from '../../AC'
+import { deleteArticle, loadArticle } from '../../AC'
 import {articleSelectorFactory} from '../../selectors/index'
+import Loader from '../Loader'
 import './article.css'
 class Article extends PureComponent {
     static propType = {
@@ -70,9 +71,15 @@ class Article extends PureComponent {
     componentDidUpdate(){
         console.log('---', 'updated');
     }
+
+    componentWillReceiveProps({isOpen, loadArticle, article}) {
+        if (isOpen && !article.text && !article.loading) loadArticle(article.id)
+    }
+
     getBody() {
         const {article, isOpen} = this.props;
         if (!isOpen) return null;
+        if(article.loading) return <Loader/>
         return(
             <section>
                 {article.text}
@@ -87,4 +94,4 @@ class Article extends PureComponent {
 
 }
 
-export default  connect(null, {deleteArticle})( Article );
+export default  connect(null, {deleteArticle, loadArticle})( Article );
